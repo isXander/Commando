@@ -4,10 +4,15 @@ plugins {
     java
     kotlin("jvm") version kotlinVersion
     id("fabric-loom") version "0.11.+"
+    id("io.github.juuxel.loom-quiltflower") version "1.+"
+    id("org.quiltmc.quilt-mappings-on-loom") version "4.+"
 }
 
-group = "com.example"
-version = "1.0"
+group = "dev.isxander"
+version = "1.0.0"
+
+val sourceCompatibility = JavaVersion.VERSION_17
+val targetCompatibility = JavaVersion.VERSION_17
 
 repositories {
     mavenCentral()
@@ -21,10 +26,9 @@ dependencies {
     val fabricVersion: String by project
     val fabricKotlinVersion: String by project
 
-    implementation(kotlin("stdlib-jdk8", kotlinVersion))
-
     minecraft("com.mojang:minecraft:$minecraftVersion")
     mappings("net.fabricmc:yarn:$yarnVersion:v2")
+
     modImplementation("net.fabricmc:fabric-loader:$loaderVersion")
     modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricVersion")
     modImplementation("net.fabricmc:fabric-language-kotlin:$fabricKotlinVersion+kotlin.$kotlinVersion")
@@ -45,6 +49,20 @@ tasks {
                     "version" to project.version
                 )
             )
+        }
+    }
+
+    withType<JavaCompile> {
+        options.encoding = "UTF-8"
+
+        options.release.set(17)
+    }
+
+
+    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions {
+            jvmTarget = "17"
+            freeCompilerArgs = freeCompilerArgs + "-opt-in=kotlin.RequiresOptIn"
         }
     }
 }
