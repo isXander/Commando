@@ -22,6 +22,9 @@
       }
     ]
   },
+  "mixins": [
+    "commando.mixins.json"
+  ],
   "depends": {
     "fabric": "*",
     "fabricloader": ">=0.12.0",
