@@ -14,6 +14,11 @@ object Commando : ModInitializer {
             dispatcher.registerUnsafeEnchant()
             dispatcher.registerHeal()
             dispatcher.registerFeed()
+            dispatcher.registerInvSee()
+            dispatcher.registerAnvil()
+            dispatcher.registerCraft()
+            dispatcher.registerEChest()
+            dispatcher.registerGamemodes()
         }
     }
 }
