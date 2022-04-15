@@ -1,8 +1,9 @@
 package dev.isxander.commando.commands
 
-import dev.isxander.commando.utils.Builder
-import dev.isxander.commando.utils.Cmd
-import dev.isxander.commando.utils.Ctx
+import dev.isxander.commando.ext.Builder
+import dev.isxander.commando.ext.Cmd
+import dev.isxander.commando.ext.Ctx
+import dev.isxander.commando.ext.requiresPerm
 import io.ejekta.kambrik.command.addCommand
 import io.ejekta.kambrik.command.requiresOp
 import net.minecraft.command.argument.EntityArgumentType
@@ -15,8 +16,6 @@ import net.minecraft.world.GameRules
 
 fun Cmd.registerGamemodes() {
     addCommand("gm") {
-        requiresOp(2)
-
         gameModeNode("c", GameMode.CREATIVE)
         gameModeNode("s", GameMode.SURVIVAL)
         gameModeNode("a", GameMode.ADVENTURE)
@@ -31,15 +30,18 @@ fun Cmd.registerGamemodes() {
 
 private fun Builder.gameModeNode(literal: String? = null, gameMode: GameMode) {
     if (literal == null) {
-        requiresOp(2)
         innerGameModeNode(gameMode)
     } else literal { innerGameModeNode(gameMode) }
 }
 
 private fun Builder.innerGameModeNode(gameMode: GameMode) {
+    requiresPerm("commando.gamemode.${gameMode.getName()}", 2)
+
     runs { changeGamemode(source.player, gameMode) }
 
     argument(EntityArgumentType.player(), "target") { target ->
+        requiresPerm("commando.gamemode.${gameMode.getName()}.others", 2)
+
         runs { changeGamemode(target().getPlayer(source), gameMode) }
     }
 }

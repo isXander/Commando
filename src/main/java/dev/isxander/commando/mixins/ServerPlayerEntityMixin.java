@@ -1,12 +1,11 @@
 package dev.isxander.commando.mixins;
 
-import com.mojang.authlib.GameProfile;
 import dev.isxander.commando.ext.IPowertoolHandler;
 import dev.isxander.commando.ext.PowertoolsKt;
+import dev.isxander.commando.saving.CommandoPlayerDataEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -86,6 +85,10 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
 
     @Inject(method = "writeCustomDataToNbt", at = @At("RETURN"))
     private void writePowertoolNbt(NbtCompound nbt, CallbackInfo ci) {
+        NbtCompound commandoNbt = new NbtCompound();
+        CommandoPlayerDataEvents.getSAVE().invoker().save(commandoNbt, (ServerPlayerEntity) (Object) this);
+        nbt.put("Commando", commandoNbt);
+
         NbtCompound powertoolNbt = new NbtCompound();
         commando$powertools.forEach((item, command) -> powertoolNbt.putString(Registry.ITEM.getId(item).toString(), command));
         nbt.put("CommandoPowertools", powertoolNbt);
@@ -93,6 +96,11 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
 
     @Inject(method = "readCustomDataFromNbt", at = @At("RETURN"))
     private void readPowertoolNbt(NbtCompound nbt, CallbackInfo ci) {
+        if (nbt.contains("Commando")) {
+            NbtCompound commandoNbt = nbt.getCompound("Commando");
+            CommandoPlayerDataEvents.getLOAD().invoker().load(commandoNbt, (ServerPlayerEntity) (Object) this);
+        }
+
         if (nbt.contains("CommandoPowertools")) {
             NbtCompound powertoolNbt = nbt.getCompound("CommandoPowertools");
             ((NbtCompoundAccessor) powertoolNbt).getEntries().forEach((itemIdStr, command) -> {

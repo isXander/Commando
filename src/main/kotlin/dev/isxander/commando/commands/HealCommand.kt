@@ -1,8 +1,9 @@
 package dev.isxander.commando.commands
 
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType
-import dev.isxander.commando.utils.Cmd
-import dev.isxander.commando.utils.Ctx
+import dev.isxander.commando.ext.Cmd
+import dev.isxander.commando.ext.Ctx
+import dev.isxander.commando.ext.requiresPerm
 import io.ejekta.kambrik.command.addCommand
 import net.minecraft.command.argument.EntityArgumentType
 import net.minecraft.entity.Entity
@@ -19,9 +20,13 @@ private val FAILED_ENTITY_EXCEPTION = DynamicCommandExceptionType { entityName -
 
 fun Cmd.registerHeal() =
     addCommand("heal") {
+        requiresPerm("commando.heal", 2)
+
         runs { executeHeal(listOf(source.entityOrThrow)) }
 
         argument(EntityArgumentType.entities(), "targets") { targets ->
+            requiresPerm("commando.heal.others", 2)
+
             runs { executeHeal(targets().getEntities(source)) }
         }
     }

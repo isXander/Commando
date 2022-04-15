@@ -17,6 +17,7 @@ val targetCompatibility = JavaVersion.VERSION_17
 repositories {
     mavenCentral()
     maven("https://maven.nucleoid.xyz")
+    maven("https://oss.sonatype.org/content/repositories/snapshots")
 }
 
 dependencies {
@@ -35,6 +36,7 @@ dependencies {
     modImplementation("net.fabricmc:fabric-language-kotlin:$fabricKotlinVersion+kotlin.$kotlinVersion")
 
     modImplementation(include("eu.pb4:sgui:1.0.1+$minecraftVersion")!!)
+    modImplementation(include("me.lucko:fabric-permissions-api:0.+")!!)
 }
 
 kotlin {

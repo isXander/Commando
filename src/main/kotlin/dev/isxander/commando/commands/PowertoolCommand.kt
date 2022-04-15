@@ -2,11 +2,7 @@ package dev.isxander.commando.commands
 
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
-import dev.isxander.commando.ext.clearPowertool
-import dev.isxander.commando.ext.getPowertoolStack
-import dev.isxander.commando.ext.registerPowertool
-import dev.isxander.commando.utils.Cmd
-import dev.isxander.commando.utils.Ctx
+import dev.isxander.commando.ext.*
 import io.ejekta.kambrik.command.addCommand
 import io.ejekta.kambrik.command.requiresOp
 import net.minecraft.text.LiteralText
@@ -17,7 +13,7 @@ private val NOT_HOLDING_ITEM = SimpleCommandExceptionType(
 
 fun Cmd.registerPowertool() =
     addCommand("powertool") {
-        requiresOp(2)
+        requiresPerm("commando.powertool", 2)
 
         runs {
             if (source.player.getPowertoolStack().isEmpty)

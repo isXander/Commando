@@ -1,7 +1,8 @@
 package dev.isxander.commando.commands
 
-import dev.isxander.commando.utils.Cmd
-import dev.isxander.commando.utils.Ctx
+import dev.isxander.commando.ext.Cmd
+import dev.isxander.commando.ext.Ctx
+import dev.isxander.commando.ext.requiresPerm
 import dev.isxander.commando.utils.coroutineTask
 import dev.isxander.commando.utils.min
 import io.ejekta.kambrik.command.addCommand
@@ -13,14 +14,18 @@ import kotlin.time.Duration.Companion.seconds
 
 fun Cmd.registerKittyCannon() =
     addCommand("kittycannon") {
-        requiresOp(2)
+        requiresPerm("commando.kittycannon", 2)
 
         runs { executeKittyCannon(false, 0f) }
 
         argFloat("power", min(0f)) { power ->
+            requiresPerm("commando.kittycannon.power", 2)
+
             runs { executeKittyCannon(false, power()) }
 
             argBool("destroy") { destroy ->
+                requiresPerm("commando.kittycannon.destroy", 2)
+
                 runs { executeKittyCannon(destroy(), power()) }
             }
         }
@@ -31,6 +36,7 @@ private fun Ctx.executeKittyCannon(destroy: Boolean, power: Float) {
     kitty.catType = CatEntity.TEXTURES.keys.random()
     kitty.isTamed = true
     kitty.isBaby = true
+    kitty.isInvulnerable = true
     kitty.setPosition(source.player.eyePos)
     kitty.velocity = source.player.rotationVector.multiply(2.0, 2.0, 2.0)
     source.world.spawnEntity(kitty)

@@ -1,7 +1,8 @@
 package dev.isxander.commando.commands
 
-import dev.isxander.commando.utils.Cmd
-import dev.isxander.commando.utils.Ctx
+import dev.isxander.commando.ext.Cmd
+import dev.isxander.commando.ext.Ctx
+import dev.isxander.commando.ext.requiresPerm
 import io.ejekta.kambrik.command.addCommand
 import io.ejekta.kambrik.command.requiresOp
 import net.minecraft.command.argument.EntityArgumentType
@@ -10,11 +11,13 @@ import net.minecraft.text.LiteralText
 
 fun Cmd.registerFly() =
     addCommand("fly") {
-        requiresOp(2)
+        requiresPerm("commando.fly", 2)
 
         runs { executeFly(source.player) }
 
         argument(EntityArgumentType.player(), "player") { player ->
+            requiresPerm("commando.fly.other", 2)
+
             runs { executeFly(player().getPlayer(source)) }
         }
     }

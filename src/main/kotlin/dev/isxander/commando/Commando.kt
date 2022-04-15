@@ -14,7 +14,6 @@ object Commando : ModInitializer {
             dispatcher.registerFly()
             dispatcher.registerFlySpeed()
             dispatcher.registerSpawnMob()
-            dispatcher.registerRemoveEffect()
             dispatcher.registerUnsafeEnchant()
             dispatcher.registerHeal()
             dispatcher.registerFeed()
@@ -25,6 +24,8 @@ object Commando : ModInitializer {
             dispatcher.registerGamemodes()
             dispatcher.registerPowertool()
             dispatcher.registerKittyCannon()
+            dispatcher.registerLoom()
+            dispatcher.registerWalkSpeed()
         }
     }
 }

@@ -2,10 +2,10 @@ package dev.isxander.commando.commands
 
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
-import dev.isxander.commando.utils.Cmd
-import dev.isxander.commando.utils.Ctx
+import dev.isxander.commando.ext.Cmd
+import dev.isxander.commando.ext.Ctx
+import dev.isxander.commando.ext.requiresPerm
 import io.ejekta.kambrik.command.addCommand
-import io.ejekta.kambrik.command.requiresOp
 import net.minecraft.command.argument.EnchantmentArgumentType
 import net.minecraft.command.argument.EntityArgumentType
 import net.minecraft.enchantment.Enchantment
@@ -31,7 +31,7 @@ private val FAILED_EXCEPTION = SimpleCommandExceptionType(TranslatableText("comm
 
 fun Cmd.registerUnsafeEnchant() =
     addCommand("unsafeenchant") {
-        requiresOp(2)
+        requiresPerm("commando.unsafeenchant", 2)
 
         argument(EntityArgumentType.entities(), "targets") { targets ->
             argument(EnchantmentArgumentType.enchantment(), "enchantment") { enchantment ->
@@ -42,7 +42,7 @@ fun Cmd.registerUnsafeEnchant() =
         }
     }
 
-fun Ctx.executeUnsafeEnchant(targets: List<Entity>, enchantment: Enchantment, level: Int) {
+private fun Ctx.executeUnsafeEnchant(targets: List<Entity>, enchantment: Enchantment, level: Int) {
     var count = 0
 
     for (entity in targets) {

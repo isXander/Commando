@@ -1,8 +1,9 @@
 package dev.isxander.commando.commands
 
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
-import dev.isxander.commando.utils.Cmd
-import dev.isxander.commando.utils.Ctx
+import dev.isxander.commando.ext.Cmd
+import dev.isxander.commando.ext.Ctx
+import dev.isxander.commando.ext.requiresPerm
 import dev.isxander.commando.utils.min
 import io.ejekta.kambrik.command.addCommand
 import io.ejekta.kambrik.command.requiresOp
@@ -36,7 +37,7 @@ private val FAILED_UUID_EXCEPTION = SimpleCommandExceptionType(
 
 fun Cmd.registerSpawnMob() =
     addCommand("spawnmob") {
-        requiresOp(2)
+        requiresPerm("commando.spawnmob", 2)
 
         argument(EntitySummonArgumentType.entitySummon(), "type", SuggestionProviders.SUMMONABLE_ENTITIES) { entity ->
             argInt("amount", min(1)) { amount ->
